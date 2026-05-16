@@ -1,1218 +1,340 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>5-Day Split Training Program</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Training Program</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0d0d;
+  --surface:#181818;
+  --surface2:#222;
+  --border:#2c2c2c;
+  --text:#f0ede8;
+  --muted:#686460;
+  --accent:#e8a030;
+  --green:#3fbf7f;
+  --blue:#4899e8;
+}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',Helvetica,Arial,sans-serif;
+  min-height:100dvh;
+  max-width:480px;
+  margin:0 auto;
+  -webkit-tap-highlight-color:transparent;
+}
 
-        :root {
-            --primary: #FF3B30;
-            --secondary: #1C1C1E;
-            --accent: #FFD60A;
-            --bg: #000000;
-            --card-bg: #1C1C1E;
-            --text: #FFFFFF;
-            --text-muted: #8E8E93;
-            --border: #2C2C2E;
-        }
+/* ── HEADER ─────────────────── */
+header{
+  position:sticky;top:0;z-index:20;
+  background:var(--bg);
+  padding:env(safe-area-inset-top,0) 0 0;
+}
+.header-inner{
+  padding:18px 20px 0;
+}
+.program-label{
+  font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:14px;font-weight:600;
+}
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            padding-bottom: 40px;
-        }
+/* ── TABS ──────────────────── */
+.tabs{
+  display:flex;gap:0;overflow-x:auto;scrollbar-width:none;
+  border-bottom:1px solid var(--border);
+}
+.tabs::-webkit-scrollbar{display:none}
+.tab{
+  flex-shrink:0;padding:11px 16px;
+  font-size:12px;font-weight:700;letter-spacing:.06em;
+  color:var(--muted);background:none;border:none;cursor:pointer;
+  border-bottom:2px solid transparent;position:relative;bottom:-1px;
+  transition:color .15s,border-color .15s;white-space:nowrap;
+}
+.tab.active{color:var(--text);border-bottom-color:var(--accent)}
 
-        .header {
-            background: linear-gradient(135deg, var(--primary) 0%, #C7372F 100%);
-            padding: 30px 20px;
-            text-align: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 4px 20px rgba(255, 59, 48, 0.3);
-        }
+/* ── DAY CONTENT ────────────── */
+.day{display:none;padding:20px 20px calc(env(safe-area-inset-bottom,0)+40px)}
+.day.active{display:block}
+.day-header{margin-bottom:22px}
+.day-title{font-size:24px;font-weight:800;letter-spacing:-.03em;line-height:1.2}
+.day-sub{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;margin-top:5px}
+.day-note{
+  font-size:12px;color:var(--muted);
+  border-left:2px solid var(--accent);padding-left:10px;
+  margin-top:12px;line-height:1.5;font-style:italic;
+}
 
-        .header h1 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 32px;
-            letter-spacing: 2px;
-            margin-bottom: 5px;
-            text-transform: uppercase;
-        }
+/* ── EXERCISE CARD ──────────── */
+.exercise{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:14px;padding:15px 16px;
+}
+.exercise.optional{
+  border-style:dashed;opacity:.8;
+}
+.ex-top{
+  display:flex;align-items:flex-start;gap:10px;
+  margin-bottom:13px;
+}
+.ex-num{
+  font-size:10px;font-weight:700;letter-spacing:.1em;
+  color:var(--muted);flex-shrink:0;margin-top:3px;
+  font-variant-numeric:tabular-nums;
+}
+.ex-name{
+  font-size:15px;font-weight:700;letter-spacing:-.01em;
+  line-height:1.35;flex:1;
+}
+.badge-group{display:flex;flex-direction:column;gap:4px;align-items:flex-end;flex-shrink:0}
+.badge{
+  font-size:9px;font-weight:800;letter-spacing:.09em;
+  padding:3px 7px;border-radius:5px;text-transform:uppercase;white-space:nowrap;
+}
+.b-warmup{background:rgba(232,160,48,.15);color:var(--accent);border:1px solid rgba(232,160,48,.3)}
+.b-tag{background:rgba(255,255,255,.06);color:var(--muted);border:1px solid var(--border)}
+.b-opt{background:rgba(72,153,232,.1);color:var(--blue);border:1px solid rgba(72,153,232,.25)}
 
-        .header p {
-            font-size: 13px;
-            opacity: 0.9;
-            font-weight: 500;
-        }
+.ex-bottom{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:8px;
+}
+.sets-reps{font-size:22px;font-weight:800;letter-spacing:-.03em;line-height:1}
+.sets-reps em{font-size:11px;font-weight:500;color:var(--muted);font-style:normal;margin-left:3px;letter-spacing:0}
+.rest-block{text-align:right}
+.rest-label{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:3px;font-weight:600}
+.rest-val{font-size:14px;font-weight:700;color:var(--green);letter-spacing:-.01em}
 
-        .weekly-split {
-            padding: 20px;
-            background: var(--card-bg);
-            margin: 20px;
-            border-radius: 16px;
-            border: 1px solid var(--border);
-        }
+.ex-note{
+  margin-top:11px;padding-top:11px;
+  border-top:1px solid var(--border);
+  font-size:12px;color:var(--muted);line-height:1.5;
+}
 
-        .weekly-split h2 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 24px;
-            color: var(--accent);
-            margin-bottom: 15px;
-            letter-spacing: 1px;
-        }
+/* ── REST DIVIDER ───────────── */
+.rest-div{
+  display:flex;align-items:center;gap:10px;
+  padding:2px 0;margin:4px 0;
+}
+.rest-div-line{flex:1;height:1px;background:var(--border)}
+.rest-div-pill{
+  font-size:10px;font-weight:700;letter-spacing:.07em;
+  color:var(--muted);
+  background:var(--surface2);
+  border:1px solid var(--border);
+  padding:5px 12px;border-radius:20px;
+  white-space:nowrap;flex-shrink:0;
+}
+.rest-div-pill .ri{font-size:9px;margin-right:4px;opacity:.7}
 
-        .split-grid {
-            display: grid;
-            gap: 10px;
-        }
+/* ── REST DAY ───────────────── */
+.rest-day{
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;padding:70px 20px;text-align:center;gap:14px;
+}
+.rest-icon{font-size:52px;line-height:1}
+.rest-title{font-size:28px;font-weight:800;letter-spacing:-.03em}
+.rest-words{font-size:14px;color:var(--muted);line-height:1.7}
 
-        .split-day {
-            background: var(--bg);
-            padding: 15px;
-            border-radius: 12px;
-            border-left: 4px solid var(--primary);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+/* ── RULES CARD ─────────────── */
+.rules-card{
+  margin-top:8px;background:var(--surface);
+  border:1px solid var(--border);border-radius:14px;padding:14px 16px;
+}
+.rules-heading{
+  font-size:9px;text-transform:uppercase;letter-spacing:.16em;
+  color:var(--muted);font-weight:700;margin-bottom:10px;
+}
+.rule-row{
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:12px;padding:6px 0;border-bottom:1px solid var(--border);gap:12px;
+}
+.rule-row:last-child{border-bottom:none}
+.rl{color:var(--muted)}
+.rv{font-weight:700;color:var(--text);text-align:right}
 
-        .split-day.rest {
-            border-left-color: var(--text-muted);
-            opacity: 0.7;
-        }
-
-        .day-label {
-            font-weight: 700;
-            font-size: 14px;
-            color: var(--primary);
-        }
-
-        .day-focus {
-            font-size: 15px;
-            font-weight: 600;
-        }
-
-        .day-container {
-            margin: 20px;
-            background: var(--card-bg);
-            border-radius: 16px;
-            overflow: hidden;
-            border: 1px solid var(--border);
-            animation: slideUp 0.5s ease-out;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .day-header {
-            background: linear-gradient(135deg, var(--primary) 0%, #C7372F 100%);
-            padding: 20px;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .day-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 28px;
-            letter-spacing: 1.5px;
-            margin-bottom: 5px;
-        }
-
-        .day-subtitle {
-            font-size: 14px;
-            opacity: 0.9;
-            font-weight: 500;
-        }
-
-        .day-content {
-            padding: 20px;
-            display: none;
-        }
-
-        .day-content.active {
-            display: block;
-        }
-
-        .muscle-info {
-            background: var(--bg);
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            font-size: 14px;
-            line-height: 1.8;
-        }
-
-        .muscle-info strong {
-            color: var(--accent);
-        }
-
-        .exercise {
-            background: var(--bg);
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 15px;
-            border: 1px solid var(--border);
-        }
-
-        .exercise-header {
-            display: flex;
-            align-items: flex-start;
-            gap: 15px;
-            margin-bottom: 12px;
-        }
-
-        .exercise-gif {
-            width: 80px;
-            height: 80px;
-            border-radius: 8px;
-            object-fit: cover;
-            background: var(--border);
-            flex-shrink: 0;
-        }
-
-        .exercise-info {
-            flex: 1;
-        }
-
-        .exercise-name {
-            font-weight: 700;
-            font-size: 16px;
-            margin-bottom: 4px;
-            color: var(--text);
-        }
-
-        .exercise-target {
-            font-size: 13px;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-        }
-
-        .exercise-stats {
-            display: flex;
-            gap: 15px;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .stat {
-            background: var(--card-bg);
-            padding: 6px 12px;
-            border-radius: 6px;
-            border: 1px solid var(--border);
-        }
-
-        .stat-value {
-            color: var(--primary);
-        }
-
-        .exercise-note {
-            background: var(--card-bg);
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 13px;
-            color: var(--text-muted);
-            margin-top: 10px;
-            border-left: 3px solid var(--accent);
-        }
-
-        .note-icon {
-            color: var(--accent);
-            margin-right: 5px;
-        }
-
-        .toggle-icon {
-            float: right;
-            font-size: 24px;
-            transition: transform 0.3s ease;
-        }
-
-        .day-header.active .toggle-icon {
-            transform: rotate(180deg);
-        }
-
-        @media (max-width: 480px) {
-            .header h1 {
-                font-size: 28px;
-            }
-            
-            .exercise-header {
-                flex-direction: column;
-            }
-            
-            .exercise-gif {
-                width: 100%;
-                height: 200px;
-            }
-        }
-    </style>
+/* ── PROGRESS INDICATOR ─────── */
+.prog{
+  display:flex;gap:3px;align-items:center;
+  padding:12px 20px 0;justify-content:center;
+}
+.prog-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--border);cursor:pointer;transition:all .2s;
+}
+.prog-dot.active{background:var(--accent);width:16px;border-radius:3px}
+</style>
 </head>
 <body>
-    <div class="header">
-        <h1>💪 5-Day Split Program</h1>
-        <p>Science-Backed Muscle Building</p>
-    </div>
 
-    <div class="weekly-split">
-        <h2>📅 WEEKLY SPLIT</h2>
-        <div class="split-grid">
-            <div class="split-day">
-                <div>
-                    <div class="day-label">Day 1</div>
-                    <div class="day-focus">Chest (Full shaping)</div>
-                </div>
+<header>
+  <div class="header-inner">
+    <p class="program-label">Training Program</p>
+    <div class="tabs" role="tablist" id="tabs"></div>
+  </div>
+</header>
+
+<div id="days-container"></div>
+
+<script>
+const DAYS = [
+  {
+    tag:"Day 1", title:"Chest & Triceps",
+    exercises:[
+      { n:"Pec Deck / Cable Fly",  s:"2", r:"12–15", rs:"60–90 sec", ra:"60–90 sec", w:false, label:"Activation", note:"Light weight — chest activation, reduce shoulder dominance. Not fatigue." },
+      { n:"Bench Press",           s:"4", r:"5–8",   rs:"2–3 min",   ra:"2–3 min",   w:true,  label:"Heavy",      note:"Main mass builder." },
+      { n:"Incline Dumbbell Press",s:"3", r:"8–10",  rs:"2–3 min",   ra:"2–3 min",   w:true,  label:"Heavy",      note:"Upper chest priority." },
+      { n:"Cable Fly",             s:"3", r:"10–12", rs:"60–90 sec", ra:"60–90 sec", w:false,                     note:"Controlled stretch and squeeze." },
+      { n:"Triceps Pushdown",      s:"3", r:"10–12", rs:"60–90 sec", ra:"60–90 sec", w:false  },
+      { n:"Overhead Triceps Extension", s:"2", r:"12–15", rs:"60–90 sec", ra:null,  w:false,  label:"Finisher"   },
+    ]
+  },
+  {
+    tag:"Day 2", title:"Back & Biceps",
+    exercises:[
+      { n:"Pull-Ups / Lat Pulldown", s:"4", r:"6–10", rs:"2–3 min",   ra:"2–3 min",   w:false, label:"Heavy",   note:"Lat width." },
+      { n:"Barbell Row",             s:"4", r:"6–8",  rs:"2–3 min",   ra:"2–3 min",   w:true,  label:"Heavy",   note:"Back thickness." },
+      { n:"Chest Supported Row",     s:"3", r:"8–10", rs:"2–3 min",   ra:"2–3 min",   w:false,                  note:"Cleaner rowing without lower-back fatigue." },
+      { n:"Dumbbell Curl",           s:"3", r:"8–12", rs:"60–90 sec", ra:"60–90 sec", w:false  },
+      { n:"Hammer Curl",             s:"3", r:"10–12",rs:"60–90 sec", ra:null,         w:false, label:"Finisher",note:"Also helps forearms." },
+    ]
+  },
+  {
+    tag:"Rest", title:"Rest Day", isRest:true
+  },
+  {
+    tag:"Day 4", title:"Shoulders & Upper Chest",
+    dayNote:"Aesthetic frame-building day.",
+    exercises:[
+      { n:"Incline Smith Machine Press",       s:"4", r:"8–10",  rs:"2–3 min",   ra:"2–3 min",   w:true,  label:"Heavy",   note:"Upper chest focus without excessive stabilization fatigue." },
+      { n:"Seated Dumbbell Shoulder Press",    s:"3", r:"8–10",  rs:"2–3 min",   ra:"2–3 min",   w:true,  label:"Heavy"  },
+      { n:"Lateral Raises",                    s:"5", r:"12–15", rs:"60–90 sec", ra:"60–90 sec", w:false,                  note:"Very important for width." },
+      { n:"Rear Delt Fly",                     s:"4", r:"12–15", rs:"60–90 sec", ra:"60–90 sec", w:false,                  note:"Critical for balanced aesthetics & posture." },
+      { n:"Cable Curl or Rope Pushdown",       s:"2", r:"12",    rs:"60–90 sec", ra:null,         w:false, optional:true,   note:"Only if recovery is good." },
+    ]
+  },
+  {
+    tag:"Day 5", title:"Legs",
+    dayNote:"Minimal effective dose — enough to stay balanced and strong.",
+    exercises:[
+      { n:"Squat",           s:"4", r:"5–8",   rs:"2–3 min",   ra:"2–3 min",   w:true,  label:"Heavy"   },
+      { n:"Romanian Deadlift",s:"3", r:"8–10",  rs:"2–3 min",   ra:"2–3 min",   w:true,  label:"Heavy"  },
+      { n:"Leg Press",       s:"3", r:"10",    rs:"2–3 min",   ra:"2–3 min",   w:false, label:"Compound"},
+      { n:"Leg Curl",        s:"2", r:"12",    rs:"60–90 sec", ra:"60–90 sec", w:false  },
+      { n:"Calf Raises",     s:"3", r:"12–15", rs:"60–90 sec", ra:null,         w:false, label:"Finisher"},
+    ]
+  }
+];
+
+const RULES = [
+  { l:"Heavy compounds (rest/set)", v:"2–3 min" },
+  { l:"Isolation (rest/set)",       v:"60–90 sec" },
+  { l:"Progression",                v:"All sets at top reps → add weight" },
+];
+
+let current = 0;
+
+function buildTabs() {
+  const cont = document.getElementById('tabs');
+  DAYS.forEach((d, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'tab' + (i === 0 ? ' active' : '');
+    btn.textContent = d.tag;
+    btn.setAttribute('role','tab');
+    btn.onclick = () => switchDay(i);
+    cont.appendChild(btn);
+  });
+}
+
+function buildDays() {
+  const cont = document.getElementById('days-container');
+  DAYS.forEach((d, i) => {
+    const div = document.createElement('div');
+    div.className = 'day' + (i === 0 ? ' active' : '');
+    div.id = 'day-' + i;
+
+    if (d.isRest) {
+      div.innerHTML = `
+        <div class="rest-day">
+          <div class="rest-icon">🛌</div>
+          <div class="rest-title">Rest &amp; Recover</div>
+          <div class="rest-words">Sleep. Eat. Recover.<br>The work is done.<br>Let your muscles grow.</div>
+        </div>`;
+      cont.appendChild(div);
+      return;
+    }
+
+    let html = `
+      <div class="day-header">
+        <div class="day-title">${d.title}</div>
+        <div class="day-sub">${d.tag} · ${d.exercises.length} exercises</div>
+        ${d.dayNote ? `<div class="day-note">${d.dayNote}</div>` : ''}
+      </div>`;
+
+    d.exercises.forEach((ex, j) => {
+      const isLast = j === d.exercises.length - 1;
+      const num = String(j + 1).padStart(2, '0');
+
+      const badges = [];
+      if (ex.w) badges.push(`<span class="badge b-warmup">▲ Warm-up</span>`);
+      if (ex.label) badges.push(`<span class="badge b-tag">${ex.label}</span>`);
+      if (ex.optional) badges.push(`<span class="badge b-opt">Optional</span>`);
+
+      html += `
+        <div class="exercise${ex.optional ? ' optional' : ''}">
+          <div class="ex-top">
+            <span class="ex-num">${num}</span>
+            <span class="ex-name">${ex.n}</span>
+            <div class="badge-group">${badges.join('')}</div>
+          </div>
+          <div class="ex-bottom">
+            <div class="sets-reps">${ex.s}<em>sets</em> × ${ex.r}<em>reps</em></div>
+            <div class="rest-block">
+              <span class="rest-label">Rest / set</span>
+              <span class="rest-val">${ex.rs}</span>
             </div>
-            <div class="split-day">
-                <div>
-                    <div class="day-label">Day 2</div>
-                    <div class="day-focus">Back (Width + Thickness)</div>
-                </div>
-            </div>
-            <div class="split-day">
-                <div>
-                    <div class="day-label">Day 3</div>
-                    <div class="day-focus">Legs (NO glutes emphasis)</div>
-                </div>
-            </div>
-            <div class="split-day">
-                <div>
-                    <div class="day-label">Day 4</div>
-                    <div class="day-focus">Shoulders (3D look)</div>
-                </div>
-            </div>
-            <div class="split-day">
-                <div>
-                    <div class="day-label">Day 5</div>
-                    <div class="day-focus">Arms (Bi, Tri, Forearms)</div>
-                </div>
-            </div>
-            <div class="split-day rest">
-                <div>
-                    <div class="day-label">Rest</div>
-                    <div class="day-focus">1–2 days anywhere</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- DAY 1: CHEST -->
-    <div class="day-container">
-        <div class="day-header" onclick="toggleDay(this)">
-            <div class="day-title">🔥 DAY 1 — CHEST</div>
-            <div class="day-subtitle">Perfect Shape</div>
-            <span class="toggle-icon">▼</span>
-        </div>
-        <div class="day-content">
-            <h3 style="color: #FF9500; font-family: 'Bebas Neue', sans-serif; font-size: 20px; margin: 0 0 15px 0; letter-spacing: 1px;">🔥 WARM-UP</h3>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/3oKIPbNb1am1icBNa0/giphy.gif" alt="Arm Circles" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">Arm Circles</div>
-                        <div class="exercise-target">Shoulder Mobility</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">2</span> sets</div>
-                            <div class="stat"><span class="stat-value">15</span> each</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/26gsspwHAXHd76q0E/giphy.gif" alt="Push-ups" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">Light Push-Ups</div>
-                        <div class="exercise-target">Chest Activation</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">2</span> sets</div>
-                            <div class="stat"><span class="stat-value">10-15</span> reps</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <h3 style="color: var(--accent); font-family: 'Bebas Neue', sans-serif; font-size: 20px; margin: 30px 0 15px 0; letter-spacing: 1px;">💪 MAIN WORKOUT</h3>
-
-            <div class="muscle-info">
-                <strong>Chest has 3 parts:</strong><br>
-                • Upper (clavicular)<br>
-                • Middle (sternal)<br>
-                • Lower (costal)
-            </div>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <video
-                      class="exercise-gif"
-                      src="media/Incline Dumbbell Press.mp4"
-                      autoplay
-                      loop
-                      muted
-                      playsinline>
-                    </video>
-                    <div class="exercise-info">
-                        <div class="exercise-name">1️⃣ Incline Dumbbell Press</div>
-                        <div class="exercise-target">Upper Chest</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">4</span> sets</div>
-                            <div class="stat"><span class="stat-value">8-12</span> reps</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="exercise-note">
-                    <span class="note-icon">📌</span> Best exercise for upper chest activation (science-backed)
-                </div>
-            </div>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/LrvaaJUExQKKFGg7wZ/giphy.gif" alt="Flat Barbell Bench Press" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">2️⃣ Flat Barbell Bench Press</div>
-                        <div class="exercise-target">Middle Chest</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">4</span> sets</div>
-                            <div class="stat"><span class="stat-value">6-10</span> reps</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="exercise-note">
-                    <span class="note-icon">📌</span> Heavy compound → mass & density
-                </div>
-            </div>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/TgC4i3fC0z4o6qz6mr/giphy.gif" alt="Cable Fly" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">3️⃣ Cable Fly</div>
-                        <div class="exercise-target">Mid Chest Isolation</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">3</span> sets</div>
-                            <div class="stat"><span class="stat-value">12-15</span> reps</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="exercise-note">
-                    <span class="note-icon">📌</span> Constant tension = shape
-                </div>
-            </div>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/kfOX7K3JadT9JVe4vd/giphy.gif" alt="Decline Dumbbell Press" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">4️⃣ Decline Dumbbell Press / Dips</div>
-                        <div class="exercise-target">Lower Chest</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">3</span> sets</div>
-                            <div class="stat"><span class="stat-value">8-12</span> reps</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="exercise-note">
-                    <span class="note-icon">📌</span> Lower chest definition
-                </div>
-            </div>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/l0HlMQlcLpDprW5mo/giphy.gif" alt="Pec Deck" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">5️⃣ Pec Deck / Low-to-High Fly</div>
-                        <div class="exercise-target">Chest Finishing</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">3</span> sets</div>
-                            <div class="stat"><span class="stat-value">12-15</span> reps</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="exercise-note">
-                    <span class="note-icon">📌</span> Chest finishing + symmetry
-                </div>
-            </div>
-
-            <h3 style="color: var(--accent); font-family: 'Bebas Neue', sans-serif; font-size: 20px; margin: 30px 0 15px 0; letter-spacing: 1px;">🔹 ABS (CORE STABILITY)</h3>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/2t9sDPrlvFpdK/giphy.gif" alt="Plank" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">6️⃣ Plank</div>
-                        <div class="exercise-target">Core Stability</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">3</span> sets</div>
-                            <div class="stat"><span class="stat-value">30-60</span> sec</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="exercise-note">
-                    <span class="note-icon">📌</span> Core stability
-                </div>
-            </div>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/3oKIPiqchxWSJAP8Bi/giphy.gif" alt="Cable Crunch" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">7️⃣ Cable/Weighted Crunch</div>
-                        <div class="exercise-target">Upper Abs</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">3</span> sets</div>
-                            <div class="stat"><span class="stat-value">12-15</span> reps</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="exercise-note">
-                    <span class="note-icon">📌</span> Upper ab focus
-                </div>
-            </div>
-
-            <h3 style="color: #4CD964; font-family: 'Bebas Neue', sans-serif; font-size: 20px; margin: 30px 0 15px 0; letter-spacing: 1px;">🧘 COOL DOWN & STRETCH</h3>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/3o7TKQ8kAP0f9X5PoY/giphy.gif" alt="Chest Stretch" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">Doorway Chest Stretch</div>
-                        <div class="exercise-target">Chest & Shoulders</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">2-3</span> sets</div>
-                            <div class="stat"><span class="stat-value">30</span> sec</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="exercise-note">
-                    <span class="note-icon">📌</span> Hold each arm position for 30 seconds
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- DAY 2: BACK -->
-    <div class="day-container">
-        <div class="day-header" onclick="toggleDay(this)">
-            <div class="day-title">🧱 DAY 2 — BACK</div>
-            <div class="day-subtitle">Width + Thickness</div>
-            <span class="toggle-icon">▼</span>
-        </div>
-        <div class="day-content">
-            <h3 style="color: #FF9500; font-family: 'Bebas Neue', sans-serif; font-size: 20px; margin: 0 0 15px 0; letter-spacing: 1px;">🔥 WARM-UP</h3>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/l0HlNaQ6gWfllcjDO/giphy.gif" alt="Cat-Cow Stretch" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">Cat-Cow Stretch</div>
-                        <div class="exercise-target">Spine Mobility</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">2</span> sets</div>
-                            <div class="stat"><span class="stat-value">10</span> reps</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/l0HlNaQ6gWfllcjDO/giphy.gif" alt="Band Pull-Aparts" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">Band Pull-Aparts</div>
-                        <div class="exercise-target">Back Activation</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">2</span> sets</div>
-                            <div class="stat"><span class="stat-value">15-20</span> reps</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <h3 style="color: var(--accent); font-family: 'Bebas Neue', sans-serif; font-size: 20px; margin: 30px 0 15px 0; letter-spacing: 1px;">💪 MAIN WORKOUT</h3>
-
-            <div class="muscle-info">
-                <strong>Back = V-taper + posture</strong>
-            </div>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/4Hf1zL3V5eZtZiXisO/giphy.gif" alt="Pull-ups" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">1️⃣ Pull-Ups / Lat Pulldown</div>
-                        <div class="exercise-target">Lat Width</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">4</span> sets</div>
-                            <div class="stat"><span class="stat-value">8-12</span> reps</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="exercise-note">
-                    <span class="note-icon">📌</span> Lat width (V shape)
-                </div>
-            </div>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/LrvaaJUExQKKFGg7wZ/giphy.gif" alt="Barbell Row" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">2️⃣ Barbell Row</div>
-                        <div class="exercise-target">Mid-Back Thickness</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">4</span> sets</div>
-                            <div class="stat"><span class="stat-value">8-10</span> reps</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="exercise-note">
-                    <span class="note-icon">📌</span> Mid-back thickness
-                </div>
-            </div>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/IZhCQqsLqOV7jIEfiL/giphy.gif" alt="Seated Cable Row" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">3️⃣ Seated Cable Row</div>
-                        <div class="exercise-target">Rhomboids & Lower Traps</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">3</span> sets</div>
-                            <div class="stat"><span class="stat-value">10-12</span> reps</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="exercise-note">
-                    <span class="note-icon">📌</span> Rhomboids & lower traps
-                </div>
-            </div>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/efRIWSaZkKius/giphy.gif" alt="Straight Arm Pulldown" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">4️⃣ Straight Arm Pulldown</div>
-                        <div class="exercise-target">Lat Isolation</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">3</span> sets</div>
-                            <div class="stat"><span class="stat-value">12-15</span> reps</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="exercise-note">
-                    <span class="note-icon">📌</span> Lat isolation
-                </div>
-            </div>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/YKMDlbsNu5raM/giphy.gif" alt="Face Pulls" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">5️⃣ Face Pulls</div>
-                        <div class="exercise-target">Rear Delts</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">3</span> sets</div>
-                            <div class="stat"><span class="stat-value">15</span> reps</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="exercise-note">
-                    <span class="note-icon">📌</span> Rear delts + shoulder health
-                </div>
-            </div>
-
-            <h3 style="color: #4CD964; font-family: 'Bebas Neue', sans-serif; font-size: 20px; margin: 30px 0 15px 0; letter-spacing: 1px;">🧘 COOL DOWN & STRETCH</h3>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/3o7TKQ8kAP0f9X5PoY/giphy.gif" alt="Child's Pose" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">Child's Pose / Lat Stretch</div>
-                        <div class="exercise-target">Back & Lats</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">2-3</span> sets</div>
-                            <div class="stat"><span class="stat-value">30</span> sec</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="exercise-note">
-                    <span class="note-icon">📌</span> Deep breathing, reach arms forward
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- DAY 3: LEGS -->
-    <div class="day-container">
-        <div class="day-header" onclick="toggleDay(this)">
-            <div class="day-title">🦵 DAY 3 — LEGS</div>
-            <div class="day-subtitle">NO Glutes Emphasis</div>
-            <span class="toggle-icon">▼</span>
-        </div>
-        <div class="day-content">
-            <h3 style="color: #FF9500; font-family: 'Bebas Neue', sans-serif; font-size: 20px; margin: 0 0 15px 0; letter-spacing: 1px;">🔥 WARM-UP</h3>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/3oKIPbNb1am1icBNa0/giphy.gif" alt="Leg Swings" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">Leg Swings</div>
-                        <div class="exercise-target">Hip Mobility</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">2</span> sets</div>
-                            <div class="stat"><span class="stat-value">10</span> each</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/l0HlNaQ6gWfllcjDO/giphy.gif" alt="Bodyweight Squats" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">Bodyweight Squats</div>
-                        <div class="exercise-target">Leg Activation</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">2</span> sets</div>
-                            <div class="stat"><span class="stat-value">15</span> reps</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <h3 style="color: var(--accent); font-family: 'Bebas Neue', sans-serif; font-size: 20px; margin: 30px 0 15px 0; letter-spacing: 1px;">💪 MAIN WORKOUT</h3>
-
-            <div class="muscle-info">
-                <strong>We avoid:</strong> squats, hip thrusts, lunges<br>
-                <strong>We target:</strong> quads, hamstrings, calves
-            </div>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/l0Iy0O3wFLjNeoSwE/giphy.gif" alt="Leg Extension" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">1️⃣ Leg Extension</div>
-                        <div class="exercise-target">Quads</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">4</span> sets</div>
-                            <div class="stat"><span class="stat-value">12-15</span> reps</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="exercise-note">
-                    <span class="note-icon">📌</span> Zero glute involvement
-                </div>
-            </div>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/PsFS0K2BwlFde/giphy.gif" alt="Hack Squat" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">2️⃣ Hack Squat</div>
-                        <div class="exercise-target">Quads (Feet LOW & Narrow)</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">3</span> sets</div>
-                            <div class="stat"><span class="stat-value">8-12</span> reps</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="exercise-note">
-                    <span class="note-icon">📌</span> Quad-dominant positioning
-                </div>
-            </div>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/fVQP6XHSYdFkKBVWKS/giphy.gif" alt="Lying Leg Curl" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">3️⃣ Lying Leg Curl</div>
-                        <div class="exercise-target">Hamstrings</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">4</span> sets</div>
-                            <div class="stat"><span class="stat-value">10-15</span> reps</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="exercise-note">
-                    <span class="note-icon">📌</span> Hamstrings only
-                </div>
-            </div>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/IZhCQqsLqOV7jIEfiL/giphy.gif" alt="Seated Leg Curl" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">4️⃣ Seated Leg Curl</div>
-                        <div class="exercise-target">Hamstring Detail</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">3</span> sets</div>
-                            <div class="stat"><span class="stat-value">12-15</span> reps</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="exercise-note">
-                    <span class="note-icon">📌</span> Hamstring detail
-                </div>
-            </div>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/MBCyiM4HIITq87t2Cn/giphy.gif" alt="Standing Calf Raises" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">5️⃣ Standing Calf Raises</div>
-                        <div class="exercise-target">Calves</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">4</span> sets</div>
-                            <div class="stat"><span class="stat-value">12-20</span> reps</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/MBCyiM4HIITq87t2Cn/giphy.gif" alt="Seated Calf Raises" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">6️⃣ Seated Calf Raises</div>
-                        <div class="exercise-target">Calves</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">3</span> sets</div>
-                            <div class="stat"><span class="stat-value">15-20</span> reps</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <h3 style="color: #4CD964; font-family: 'Bebas Neue', sans-serif; font-size: 20px; margin: 30px 0 15px 0; letter-spacing: 1px;">🧘 COOL DOWN & STRETCH</h3>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/3o7TKQ8kAP0f9X5PoY/giphy.gif" alt="Quad Stretch" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">Standing Quad Stretch</div>
-                        <div class="exercise-target">Quadriceps</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">2</span> sets</div>
-                            <div class="stat"><span class="stat-value">30</span> sec</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="exercise-note">
-                    <span class="note-icon">📌</span> Each leg, hold for 30 seconds
-                </div>
-            </div>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/l0HlNaQ6gWfllcjDO/giphy.gif" alt="Hamstring Stretch" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">Seated Hamstring Stretch</div>
-                        <div class="exercise-target">Hamstrings</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">2</span> sets</div>
-                            <div class="stat"><span class="stat-value">30</span> sec</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="exercise-note">
-                    <span class="note-icon">📌</span> Reach for toes, keep back straight
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- DAY 4: SHOULDERS -->
-    <div class="day-container">
-        <div class="day-header" onclick="toggleDay(this)">
-            <div class="day-title">🟦 DAY 4 — SHOULDERS</div>
-            <div class="day-subtitle">3D Round Look</div>
-            <span class="toggle-icon">▼</span>
-        </div>
-        <div class="day-content">
-            <h3 style="color: #FF9500; font-family: 'Bebas Neue', sans-serif; font-size: 20px; margin: 0 0 15px 0; letter-spacing: 1px;">🔥 WARM-UP</h3>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/3oKIPbNb1am1icBNa0/giphy.gif" alt="Arm Circles" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">Arm Circles</div>
-                        <div class="exercise-target">Shoulder Mobility</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">2</span> sets</div>
-                            <div class="stat"><span class="stat-value">15</span> each</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/YKMDlbsNu5raM/giphy.gif" alt="Band Pull-Aparts" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">Light Lateral Raises</div>
-                        <div class="exercise-target">Shoulder Activation</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">2</span> sets</div>
-                            <div class="stat"><span class="stat-value">15</span> reps</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <h3 style="color: var(--accent); font-family: 'Bebas Neue', sans-serif; font-size: 20px; margin: 30px 0 15px 0; letter-spacing: 1px;">💪 MAIN WORKOUT</h3>
-
-            <div class="muscle-info">
-                <strong>Shoulders have 3 heads:</strong><br>
-                • Front<br>
-                • Side (most important for width)<br>
-                • Rear
-            </div>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/fvkuchyIIIvxRMM8P6/giphy.gif" alt="Seated Dumbbell Shoulder Press" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">1️⃣ Seated Dumbbell Press</div>
-                        <div class="exercise-target">Overall Mass</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">4</span> sets</div>
-                            <div class="stat"><span class="stat-value">6-10</span> reps</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="exercise-note">
-                    <span class="note-icon">📌</span> Overall mass
-                </div>
-            </div>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/Xr9FoaXy2YVxe/giphy.gif" alt="Lateral Raises" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">2️⃣ Lateral Raises</div>
-                        <div class="exercise-target">Side Delts (WIDTH)</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">4</span> sets</div>
-                            <div class="stat"><span class="stat-value">12-15</span> reps</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="exercise-note">
-                    <span class="note-icon">📌</span> Shoulder width (KEY)
-                </div>
-            </div>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/YmVNzDnbiOQUw/giphy.gif" alt="Cable Lateral Raise" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">3️⃣ Cable Lateral Raise</div>
-                        <div class="exercise-target">Side Delts</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">3</span> sets</div>
-                            <div class="stat"><span class="stat-value">12-15</span> reps</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="exercise-note">
-                    <span class="note-icon">📌</span> Constant tension → shape
-                </div>
-            </div>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/YKMDlbsNu5raM/giphy.gif" alt="Rear Delt Fly" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">4️⃣ Rear Delt Fly</div>
-                        <div class="exercise-target">Rear Delts</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">3</span> sets</div>
-                            <div class="stat"><span class="stat-value">12-15</span> reps</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="exercise-note">
-                    <span class="note-icon">📌</span> Back shoulder balance
-                </div>
-            </div>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/efRIWSaZkKius/giphy.gif" alt="Upright Cable Row" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">5️⃣ Upright Cable Row</div>
-                        <div class="exercise-target">Upper Delts & Traps</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">3</span> sets</div>
-                            <div class="stat"><span class="stat-value">10-12</span> reps</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="exercise-note">
-                    <span class="note-icon">📌</span> Upper delts + traps
-                </div>
-            </div>
-
-            <h3 style="color: #4CD964; font-family: 'Bebas Neue', sans-serif; font-size: 20px; margin: 30px 0 15px 0; letter-spacing: 1px;">🧘 COOL DOWN & STRETCH</h3>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/3o7TKQ8kAP0f9X5PoY/giphy.gif" alt="Shoulder Stretch" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">Cross-Body Shoulder Stretch</div>
-                        <div class="exercise-target">Shoulders & Rear Delts</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">2</span> sets</div>
-                            <div class="stat"><span class="stat-value">30</span> sec</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="exercise-note">
-                    <span class="note-icon">📌</span> Each arm, pull across body gently
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- DAY 5: ARMS -->
-    <div class="day-container">
-        <div class="day-header" onclick="toggleDay(this)">
-            <div class="day-title">💪 DAY 5 — ARMS</div>
-            <div class="day-subtitle">Max Size & Detail</div>
-            <span class="toggle-icon">▼</span>
-        </div>
-        <div class="day-content">
-            <h3 style="color: #FF9500; font-family: 'Bebas Neue', sans-serif; font-size: 20px; margin: 0 0 15px 0; letter-spacing: 1px;">🔥 WARM-UP</h3>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/3oKIPbNb1am1icBNa0/giphy.gif" alt="Wrist Circles" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">Wrist Circles & Flexion</div>
-                        <div class="exercise-target">Wrist Mobility</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">2</span> sets</div>
-                            <div class="stat"><span class="stat-value">10</span> each</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/QaZ3InDQJUYOA/giphy.gif" alt="Light Curls" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">Light Band Curls</div>
-                        <div class="exercise-target">Arm Activation</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">2</span> sets</div>
-                            <div class="stat"><span class="stat-value">15</span> reps</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <h3 style="color: var(--accent); font-family: 'Bebas Neue', sans-serif; font-size: 20px; margin: 30px 0 15px 0; letter-spacing: 1px;">💪 MAIN WORKOUT</h3>
-
-            <div class="muscle-info">
-                <strong>Complete arm development</strong><br>
-                Biceps • Triceps • Forearms
-            </div>
-
-            <h3 style="color: var(--accent); font-family: 'Bebas Neue', sans-serif; font-size: 20px; margin: 20px 0 15px 0; letter-spacing: 1px;">🔹 BICEPS</h3>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/QaZ3InDQJUYOA/giphy.gif" alt="EZ-Bar Curl" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">1️⃣ EZ-Bar Curl</div>
-                        <div class="exercise-target">Biceps</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">4</span> sets</div>
-                            <div class="stat"><span class="stat-value">8-12</span> reps</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/l41lUjUgLLwWrz20w/giphy.gif" alt="Incline DB Curl" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">2️⃣ Incline DB Curl</div>
-                        <div class="exercise-target">Long Head Biceps</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">3</span> sets</div>
-                            <div class="stat"><span class="stat-value">10-12</span> reps</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/xT8qBhrlUruglyOZ7a/giphy.gif" alt="Hammer Curl" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">3️⃣ Hammer Curl</div>
-                        <div class="exercise-target">Brachialis & Brachioradialis</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">3</span> sets</div>
-                            <div class="stat"><span class="stat-value">10-12</span> reps</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <h3 style="color: var(--accent); font-family: 'Bebas Neue', sans-serif; font-size: 20px; margin: 30px 0 15px 0; letter-spacing: 1px;">🔹 TRICEPS</h3>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/LrvaaJUExQKKFGg7wZ/giphy.gif" alt="Close-Grip Bench Press" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">4️⃣ Close-Grip Bench Press</div>
-                        <div class="exercise-target">Overall Triceps Mass</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">4</span> sets</div>
-                            <div class="stat"><span class="stat-value">6-10</span> reps</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/QaZ3InDQJUYOA/giphy.gif" alt="Cable Pushdown" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">5️⃣ Cable Pushdown</div>
-                        <div class="exercise-target">Lateral & Medial Head</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">3</span> sets</div>
-                            <div class="stat"><span class="stat-value">10-15</span> reps</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/xT8qBhrlUruglyOZ7a/giphy.gif" alt="Overhead DB Extension" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">6️⃣ Overhead DB Extension</div>
-                        <div class="exercise-target">Long Head Triceps</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">3</span> sets</div>
-                            <div class="stat"><span class="stat-value">10-12</span> reps</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <h3 style="color: var(--accent); font-family: 'Bebas Neue', sans-serif; font-size: 20px; margin: 30px 0 15px 0; letter-spacing: 1px;">🔹 FOREARMS</h3>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/QaZ3InDQJUYOA/giphy.gif" alt="Reverse Curl" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">7️⃣ Reverse Curl</div>
-                        <div class="exercise-target">Forearm Extensors</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">3</span> sets</div>
-                            <div class="stat"><span class="stat-value">12-15</span> reps</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/xT8qBhrlUruglyOZ7a/giphy.gif" alt="Wrist Curls" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">8️⃣ Wrist Curls</div>
-                        <div class="exercise-target">Forearm Flexors</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">3</span> sets</div>
-                            <div class="stat"><span class="stat-value">15</span> reps</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <h3 style="color: #4CD964; font-family: 'Bebas Neue', sans-serif; font-size: 20px; margin: 30px 0 15px 0; letter-spacing: 1px;">🧘 COOL DOWN & STRETCH</h3>
-
-            <div class="exercise">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/3o7TKQ8kAP0f9X5PoY/giphy.gif" alt="Bicep Stretch" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">Bicep Wall Stretch</div>
-                        <div class="exercise-target">Biceps & Forearms</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">2</span> sets</div>
-                            <div class="stat"><span class="stat-value">30</span> sec</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="exercise-note">
-                    <span class="note-icon">📌</span> Each arm against wall, rotate body away
-                </div>
-            </div>
-
-            <div class="exercisessss">
-                <div class="exercise-header">
-                    <img src="https://media.giphy.com/media/l0HlNaQ6gWfllcjDO/giphy.gif" alt="Tricep Stretch" class="exercise-gif">
-                    <div class="exercise-info">
-                        <div class="exercise-name">Overhead Tricep Stretch</div>
-                        <div class="exercise-target">Triceps</div>
-                        <div class="exercise-stats">
-                            <div class="stat"><span class="stat-value">2</span> sets</div>
-                            <div class="stat"><span class="stat-value">30</span> sec</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="exercise-note">
-                    <span class="note-icon">📌</span> Pull elbow behind head gently
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function toggleDay(header) {
-            const content = header.nextElementSibling;
-            const allHeaders = document.querySelectorAll('.day-header');
-            const allContents = document.querySelectorAll('.day-content');
-            
-            // Close all other sections
-            allHeaders.forEach(h => {
-                if (h !== header) {
-                    h.classList.remove('active');
-                }
-            });
-            allContents.forEach(c => {
-                if (c !== content) {
-                    c.classList.remove('active');
-                }
-            });
-            
-            // Toggle current section
-            header.classList.toggle('active');
-            content.classList.toggle('active');
-        }
-    </script>
+          </div>
+          ${ex.note ? `<div class="ex-note">${ex.note}</div>` : ''}
+        </div>`;
+
+      if (!isLast && ex.ra) {
+        html += `
+          <div class="rest-div">
+            <div class="rest-div-line"></div>
+            <div class="rest-div-pill"><span class="ri">⏱</span>Rest ${ex.ra} before next</div>
+            <div class="rest-div-line"></div>
+          </div>`;
+      }
+    });
+
+    html += `
+      <div style="margin-top:8px"></div>
+      <div class="rules-card">
+        <div class="rules-heading">General Rules</div>
+        ${RULES.map(r => `<div class="rule-row"><span class="rl">${r.l}</span><span class="rv">${r.v}</span></div>`).join('')}
+      </div>`;
+
+    div.innerHTML = html;
+    cont.appendChild(div);
+  });
+}
+
+function switchDay(i) {
+  const tabs = document.querySelectorAll('.tab');
+  const days = document.querySelectorAll('.day');
+  tabs.forEach((t, j) => t.classList.toggle('active', j === i));
+  days.forEach((d, j) => d.classList.toggle('active', j === i));
+  current = i;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+buildTabs();
+buildDays();
+</script>
 </body>
 </html>
